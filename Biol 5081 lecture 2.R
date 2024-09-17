@@ -13,11 +13,22 @@
 
 # ```{r Negative Binomial}
 library(MASS)
-MASS::rnegbin(100, mu=5, theta=10) # To carry our flycatcher example forward, negative binomial could be what is the number of singing males we see over a week (as opposed to alarm calling or otherwise not singing). n=# of sites we visit (or site-weeks), mu= mean, theta= measure of over dispersion. If mu = theta, you have poisson distribution (according to here: https://stats.stackexchange.com/questions/10419/what-is-theta-in-a-negative-binomial-regression-fitted-with-r)
-hist(MASS::rnegbin(100, mu=5, theta=10))
-plot(density(MASS::rnegbin(100, mu=5, theta=10)))
-```
+# To carry our flycatcher example forward, negative binomial could be what is the number of 
+# singing males we see over a week (as opposed to alarm calling or otherwise not singing). 
+# n=# of sites we visit (or site-weeks), mu= mean, theta= measure of over dispersion. 
+# If mu = theta, you have poisson distribution 
+# (according to here: https://stats.stackexchange.com/questions/10419/what-is-theta-in-a-negative-binomial-regression-fitted-with-r)
 
-Binomial vs Negative Binomial
-Binomial - number of trials is fixed (n), number of successes is a random variable.
-Negative Binomial - number of successes is fixed (r), number of trials is the random variable (x)
+# Make a histogram, using library MASS make a negative binomial variates simulation (n, mu, theta)
+hist(MASS::rnegbin(100, mu=5, theta=10))
+
+# Using library MASS, create negative binomial variates simulation (n, mu, theta)
+MASS::rnegbin(100, mu=5, theta=10) 
+
+# Make a plot of the density of NBV simulation
+plot(density(MASS::rnegbin(100, mu=5, theta=10)))
+
+
+# Binomial vs Negative Binomial
+# Binomial - number of trials is fixed (n), number of successes is a random variable.
+# Negative Binomial - number of successes is fixed (r), number of trials is the random variable (x)
