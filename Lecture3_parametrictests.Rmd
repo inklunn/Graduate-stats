@@ -3,6 +3,8 @@ title: "Lecture 3"
 author: "Eryn McFarlane"
 date: "`r Sys.Date()`"
 output: html_document
+
+Katherine Lunn
 ---
 
 ```{r setup, include=FALSE}
