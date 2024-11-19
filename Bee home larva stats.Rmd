@@ -1,0 +1,48 @@
+---
+title: "Bee Home Larva"
+author: "Katherine Lunn"
+date: "2024-11-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(pscl)
+library(MASS)
+```
+
+## Negative binomial
+
+The impact of sample size on the number of genera identified was considered using a negative binomial regression. 
+Target region, sample size and interaction between these were considered as factors which impact the number of genera identified in the samples.
+
+neg_binomial <- glm.nb(ASVs ~ Sample.size * Target.region)
+
+When samples are received add in target_region used. Change from read matrix to binary matrix. 
+I would then have to merge all sample names (they will differ between MiSeq runs) so I can create one large document
+So that sample size could be identified, I would need to ID bee occupant and then apply that to the sample name
+
+- Can I then run a negative binomial on this? Or do I have to make a summary document?
+
+```{r nbr}
+# Bring in All_species_sample_counts_1.csv
+beelarva_matrix <- read.csv(file.choose())
+
+neg_binomial <- glm.nb(ASVs ~ Sample.size * Target.region, data = beelarva_matrix)
+summary(neg_binomial)
+```
+
+## MCA
+
+Multiple correspondence analysis?
+- Is there a large difference in the resources utilised by species/groups/areas etc?
+Network analysis?
+- Can consider whether certain resources are being used more regularly by bee home species than others?
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
