@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(pscl)
 library(MASS)
+library(FactoMineR)
+library(factoextra)
 ```
 
 ## Negative binomial
@@ -23,26 +25,76 @@ When samples are received add in target_region used. Change from read matrix to 
 I would then have to merge all sample names (they will differ between MiSeq runs) so I can create one large document
 So that sample size could be identified, I would need to ID bee occupant and then apply that to the sample name
 
-- Can I then run a negative binomial on this? Or do I have to make a summary document?
+- Can I then run a negative binomial on this? Or do I have to make a summary document? The following is done on a summary document.
 
 ```{r nbr}
 # Bring in All_species_sample_counts_1.csv
 beelarva_matrix <- read.csv(file.choose())
 
 neg_binomial <- glm.nb(ASVs ~ Sample.size * Target.region, data = beelarva_matrix)
+
 summary(neg_binomial)
 ```
+So we can see that sample size, RBCL, ITS and an interaction between sample size and RBCL are impacting the number of interactions detected.
 
-## MCA
+Further than this? What statistical tests could we use to break this down? 
+How much of an impact is sample size having perhaps?
+What is the interaction between sample size and RBCL? This seems odd and should look into it.
 
-Multiple correspondence analysis?
-- Is there a large difference in the resources utilised by species/groups/areas etc?
+I was mostly using target region because I wanted to see if sample size was impacting each target region.. I think that we already know the target regions themselves impact number of ASVs detected. For example, we have to cut out a lot of ASvs within 16s due to potential contamination. There was high negative contamination for example. And COI isn't surprising because there are likely far fewer arthropods interacting with the bees... COI is mostly used for identification. 
+
+ANOVA?
+
+
+```{r nbr further investigation}
+an_bin <- anova(neg_binomial)
+
+an_bin
+
+```
+
+## Comparing clusters of individuals
+- Is there a noticeable difference in the resources utilised by species/groups/areas etc? (eventually)
+- Similarities within species? Do they tend to utilise the same resources
+- Similarities within a tube? Any difference between individual larva?
+
+SO. I have a presence-absence matrix, for each of my main occupant species and the genera they are interacting with.
+
+
+Vegan
+Microbiome lit, clustering, concurrence analysis
+
+Ecological resemblance - compositional dissimilarity, multidimensional compositional space
+
+Double-0s are a problem as they are "missing data" and programs cannot infer the similarity/disimilarity between these two clusters
+- Want to ID them as asymmetircal indices as they do not offer valuable data to the similarity between clusters
+
+I have quantitative indices as it is count data (how many samples of a species, is another taxa present in e.g. count 4 (of a taxa) out of 6 samples (species)). Probably want to make this a relative frequency is sample sizes differ largely.
+- Percentage similarity (suggested similarity indice for quantitative data)
+- Jaccard, Sorensen or Simpson similarity (for qualitative data (if I choose to make it a binary matrix))
+
+
+
+
+
+
+```{r mca}
+MCA_database <- read.csv(file.choose())
+
+MCA_nogenus <- MCA_database[, -1]
+
+mca_result <- MCA(MCA_nogenus, quali.sup = c(1, 2))
+
+
+
+```
+
 Network analysis?
 - Can consider whether certain resources are being used more regularly by bee home species than others?
 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+
+
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
